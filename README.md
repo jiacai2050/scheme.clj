@@ -46,6 +46,13 @@ hello scheme.clj
 (2)
 > (if (> 3 2) 3 2)
 3
+> (define (my-add x y) (+ y x))
+nil
+> (my-add 1 2)
+3
+> (let ((x 1) (y 2))  (my-add x y))
+3
+> exit
 ```
 
 More supported functions can be found in [env.clj](src/scheme/env.clj).
@@ -55,6 +62,10 @@ More supported functions can be found in [env.clj](src/scheme/env.clj).
 
 - [ ] function currying
 - [ ] a GUI to execute Scheme code
+
+## Timeline
+
+- 2016/09/17, v0.1, first init
 
 ## License
 

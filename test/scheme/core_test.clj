@@ -24,6 +24,14 @@
                                             3
                                             2)))))
 
+  (testing "eval let"
+    (is (= 6 (eval-scheme the-global-env '(let ((x (+ 1 1)) (y (+ 2 2)))
+                                            (+ y x))))))
+
+  (testing "eval define"
+    (eval-scheme the-global-env '(define (my-add x y) (+ x y)))
+    (is (= 2 (eval-scheme the-global-env '(my-add 1 1)))))
+
   (testing "eval pair/list"
     (are [pair-or-lst expr] (= pair-or-lst (eval-scheme the-global-env expr))
       (->pair 2 3) '(cons 2 3)

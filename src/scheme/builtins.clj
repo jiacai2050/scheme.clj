@@ -24,8 +24,27 @@
 (defn eval-define [eval env var val]
   (match [var]
          [var :guard symbol?] (expand-env env (hash-map (keyword var)
-                                                        (eval env val)))
-         ))
+                                                        (eval env (first val))))
+         [([fn-name & params] :seq)] (let [old-env (atom @env)] ;; make a copy of origin env to avoid circular reference
+                                       (expand-env env (hash-map (keyword fn-name)
+                                                                 (->Closure params val old-env)))))
+  nil)
+
+(defn- eval-seqs [eval env seqs]
+  "Eval a sequences of expr and return last expr as value"
+  (loop [seqs seqs]
+    (if (< (count seqs) 2)
+      (eval env (first seqs))
+      (do
+        (eval env (first seqs))
+        (recur (rest seqs))))))
+
+(defn eval-let [eval env binding body]
+  (let [added-env (into {} (map (fn [[var val]]
+                                  [(keyword var) (eval env val)])
+                                binding))
+        new-env (generate-new-env env added-env)]
+    (eval-seqs eval new-env body)))
 
 (defn eval-if [eval env test then else]
   (if (eval env test) 
@@ -43,13 +62,7 @@
                                           saved-env (:env closure)
                                           new-env (generate-new-env saved-env (zipmap (map keyword params)
                                                                                       evaled-operands))]
-                                      (loop [body body]   ;; only return value of last expr
-                                        (if (< (count body) 2)
-                                          (eval new-env (first body))
-                                          (do
-                                            (eval new-env (first body))
-                                            (recur (rest body))))))
+                                      (eval-seqs eval new-env body))
 
-           [raw-op] (apply evaled-operator
-                           evaled-operands))))
+           [raw-op] (apply evaled-operator evaled-operands))))
 

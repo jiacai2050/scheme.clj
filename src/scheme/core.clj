@@ -7,13 +7,12 @@
   (match [expr]
          [x :guard self-eval?] (self-eval env x)
          [(['lambda ([& params] :seq) & body] :seq)] (eval-lambda eval-scheme env
-                                                              params body)
-
-         [(['define var val] :seq)] (eval-define eval-scheme env
-                                                   var val)
+                                                                  params body)
+         [(['define var & val] :seq)]  (eval-define eval-scheme env
+                                                    var val)
+         [(['let ([& binding] :seq) & body] :seq)] (eval-let eval-scheme env
+                                                             binding body)
          [(['if test then & else] :seq)]  (eval-if eval-scheme env
                                                    test then else)
          [([operator & operands] :seq)] (eval-application eval-scheme env
-                                                          operator
-                                                          operands)
-))
+                                                          operator operands)))
