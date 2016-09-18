@@ -48,4 +48,11 @@
                                                     (println (str "x = " x ", y = " y))
                                                     (+ x y)) 
                                             1
-                                            2))))))
+                                            2)))))
+  (testing "eval lambda currying ..."
+    (is (= 3 (eval-scheme the-global-env '(((lambda (x y)
+                                                     (+ x y))
+                                            1)
+                                           2)
+                          ))))
+)

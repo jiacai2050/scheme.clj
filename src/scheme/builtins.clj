@@ -40,10 +40,12 @@
         (recur (rest seqs))))))
 
 (defn eval-let [eval env binding body]
-  (let [added-env (into {} (map (fn [[var val]]
-                                  [(keyword var) (eval env val)])
-                                binding))
-        new-env (generate-new-env env added-env)]
+  (let [expanded-env (reduce (fn [new-env [var val]]
+                               (merge new-env (hash-map (keyword var)
+                                                        (eval env val))))
+                             {}
+                             binding)
+        new-env (generate-new-env env expanded-env)]
     (eval-seqs eval new-env body)))
 
 (defn eval-if [eval env test then else]
@@ -57,12 +59,18 @@
   (let [evaled-operator (eval env operator)
         evaled-operands (map (partial eval env) operands)]
     (match [evaled-operator]
-           [closure :guard record?] (let [params (:params closure)
-                                          body (:body closure)
-                                          saved-env (:env closure)
-                                          new-env (generate-new-env saved-env (zipmap (map keyword params)
-                                                                                      evaled-operands))]
-                                      (eval-seqs eval new-env body))
-
-           [raw-op] (apply evaled-operator evaled-operands))))
+           [closure :guard (partial instance? Closure)]
+           (let [params (:params closure)
+                 body (:body closure)
+                 saved-env (:env closure)
+                 new-env (generate-new-env saved-env (zipmap (map keyword params)
+                                                             evaled-operands))]
+             (let [num-param (count params)
+                   num-operand (count operands)]
+               (if (zero? (- num-param num-operand))
+                 (eval-seqs eval new-env body)
+                 (->Closure (drop num-operand params)
+                            body
+                            new-env))))
+           [raw-op] (apply raw-op evaled-operands))))
 

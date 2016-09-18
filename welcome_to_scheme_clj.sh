@@ -5,7 +5,7 @@ JAR="target/scheme.clj-*-standalone.jar"
 cd $(dirname $0; pwd)
 
 if ! ls $JAR &>/dev/null;then
-  echo "Can't find a uberjar, packaging now ..."
+  echo "Can't find an uberjar, packaging now ..."
   lein uberjar
 fi
 

@@ -52,6 +52,8 @@ nil
 3
 > (let ((x 1) (y 2))  (my-add x y))
 3
+> (((lambda (x y) (+ x y)) 1) 2)   ;; currying
+3
 > exit
 ```
 
@@ -60,12 +62,14 @@ More supported functions can be found in [env.clj](src/scheme/env.clj).
 
 ## TODO
 
-- [ ] function currying
+- [x] function currying (2016/09/18)
+- [ ] port to ClojureScript
+- [ ] [tco](http://c2.com/cgi/wiki?ProperTailRecursion)
 - [ ] a GUI to execute Scheme code
 
-## Timeline
+## ChangeLog
 
-- 2016/09/17, v0.1, first init
+- `2016/09/17`, v0.1, first init
 
 ## License
 
