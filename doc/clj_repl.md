@@ -33,4 +33,4 @@ nil
 > exit
 ```
 
-More supported functions can be found in [env.cljc](src/cljc/scheme/env.cljc).
+More supported functions can be found in [env.cljc](../src/cljc/scheme/env.cljc).
