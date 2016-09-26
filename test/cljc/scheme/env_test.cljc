@@ -1,5 +1,6 @@
 (ns scheme.env-test
-  (:require [clojure.test :refer :all]
+  (:require #?(:clj [clojure.test :refer [deftest testing is]]
+               :cljs [cljs.test :refer-macros [deftest testing is]])
             [scheme.env :refer [find-var-in-env the-global-env expand-env]]))
 
 (deftest test-expand-env

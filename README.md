@@ -1,12 +1,16 @@
 # scheme.clj
 
-Yet another Scheme dialect written in Clojure
+Yet another Scheme dialect written in Clojure and ClojureScript
 
 ## Usage
 
 ```
-;; first clone this repo, then
+# First clone this repo, then run
 
+# ClojureScript
+lein trampoline cljsbuild repl-rhino  
+
+# Clojure
 lein uberjar
 java -jar target/scheme.clj-*-standalone.jar
 ```
@@ -21,55 +25,33 @@ sudo yum install rlwrap
 brew install rlwrap  # for Homebrew
 port install rlwrap  # for MacPorts
 ```
-Then, run like this
-```shell
-rlwrap java -jar target/scheme.clj-*-standalone.jar
 
-Welcome to Scheme.clj
-> 1
-1
-> "hello scheme.clj"
-hello scheme.clj
-> (+ 1 2)
-3
-> ((lambda (x y) (+ y x)) 1 2)
-3
-> (if (> 3 2) 3 2)
-3
-> (cons 1 2)
-#scheme.env.pair{:x 1, :y 2}
-> (list 1 2)
-(1 2)
-> (car (list 1 2))
-1
-> (cdr (list 1 2))
-(2)
-> (if (> 3 2) 3 2)
-3
-> (define (my-add x y) (+ y x))
-nil
-> (my-add 1 2)
-3
-> (let ((x 1) (y 2))  (my-add x y))
-3
-> (((lambda (x y) (+ x y)) 1) 2)   ;; currying
-3
-> exit
+Concrete REPL demos can be found here:
+
+- [Clojure](doc/clj_repl.md)
+- [ClojureScript](doc/cljs_rhino.md)
+
+
+## Test
+
 ```
+# Clojure
+lein test
 
-More supported functions can be found in [env.clj](src/scheme/env.clj).
-
-
+# ClojureScript
+lein doo node node-test once
+```
 ## TODO
 
 - [x] function currying (2016/09/18)
-- [ ] port to ClojureScript
+- [x] port to ClojureScript (2016/09/26)
 - [ ] [tco](http://c2.com/cgi/wiki?ProperTailRecursion)
 - [ ] a GUI to execute Scheme code
 
 ## ChangeLog
 
 - `2016/09/17`, v0.1, first init
+- `2016/09/26`, v0.2, port to ClojureScript
 
 ## License
 

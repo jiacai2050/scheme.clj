@@ -1,11 +1,11 @@
 (ns scheme.env)
 
-(defrecord pair [x y])
+(defrecord Pair [x y])
 
 (defn- scheme-cons [x y]
   (if (or (nil? y) (list? y))
     (cons x y)
-    (->pair x y)))
+    (Pair. x y)))
 
 (defn- scheme-car [pair-or-lst]
   (if (list? pair-or-lst)

@@ -1,13 +1,21 @@
 (ns scheme.builtins
-  (:require [scheme.env :refer [find-var-in-env expand-env generate-new-env]]
-            [clojure.core.match :refer [match]]))
+  (:require
+   #?(:clj [clojure.core.match :refer [match]]
+      :cljs [cljs.core.match :refer-macros [match]])
+   [scheme.env :refer [find-var-in-env expand-env generate-new-env]]))
+
+(defn- boolean? [x]
+  (let [checker #?(:clj #(instance? Boolean %)
+                   :cljs cljs.core/boolean?)]
+    (checker x)))
+
 
 (defn self-eval? [x]
   (or (number? x)
       (symbol? x)
       (nil? x)
       (string? x)
-      (instance? Boolean x)))
+      (boolean? x)))
 
 (defn self-eval [env x]
   (match [x]
@@ -15,11 +23,12 @@
          [string :guard string?] string
          [sym :guard symbol?] (find-var-in-env env (keyword sym))
          [null :guard nil?] nil
-         [bool :guard (partial instance? Boolean)] bool))
+         [bool :guard boolean?] bool))
 
 (defrecord Closure [params body env])
+
 (defn eval-lambda [eval env params body]
-  (->Closure params body env))
+  (Closure. params body env))
 
 (defn eval-define [eval env var val]
   (match [var]
@@ -27,7 +36,7 @@
                                                         (eval env (first val))))
          [([fn-name & params] :seq)] (let [old-env (atom @env)] ;; make a copy of origin env to avoid circular reference
                                        (expand-env env (hash-map (keyword fn-name)
-                                                                 (->Closure params val old-env)))))
+                                                                 (Closure. params val old-env)))))
   nil)
 
 (defn- eval-seqs [eval env seqs]
@@ -69,7 +78,7 @@
                    num-operand (count operands)]
                (if (zero? (- num-param num-operand))
                  (eval-seqs eval new-env body)
-                 (->Closure (drop num-operand params)
+                 (Closure. (drop num-operand params)
                             body
                             new-env))))
            [raw-op] (apply raw-op evaled-operands))))
