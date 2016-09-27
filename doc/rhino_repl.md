@@ -11,5 +11,3 @@ cljs.user=> (eval "(((lambda (x y) (+ x y)) 1) 2)")
 3
 cljs.user=>
 ```
-
-More supported expressions can be found in [Clojure REPL demo](clj_repl.md).

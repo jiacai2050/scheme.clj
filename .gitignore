@@ -11,3 +11,4 @@ pom.xml.asc
 .hg/
 .cljs_rhino_repl/
 out/
+resources/

@@ -1,4 +1,4 @@
-(ns scheme.console
+(ns scheme.repl
   (:refer-clojure :exclude [eval])
   (:require [scheme.core :refer [eval]])
   (:import [jline.console ConsoleReader])
