@@ -8,6 +8,14 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://app.klipse.tech/css/codemirror.css">
+    <script src="http://app.klipse.tech/plugin/js/klipse_plugin.js?v=3.3.1"></script>
+    <script>
+        window.klipse_settings = {
+            selector: '.language-klipse'
+        };
+
+    </script>
   </head>
   <body>
     <section class="page-header">
@@ -42,36 +50,20 @@
 <h2>
 <a id="demo" class="anchor" href="#demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo</h2>
 
-<pre><code>&gt; 1
-1
-&gt; "hello scheme.clj"
-hello scheme.clj
-&gt; (+ 1 2)
-3
-&gt; ((lambda (x y) (+ y x)) 1 2)
-3
-&gt; (if (&gt; 3 2) 3 2)
-3
-&gt; (cons 1 2)
-#scheme.env.pair{:x 1, :y 2}
-&gt; (list 1 2)
-(1 2)
-&gt; (car (list 1 2))
-1
-&gt; (cdr (list 1 2))
-(2)
-&gt; (if (&gt; 3 2) 3 2)
-3
-&gt; (define (my-add x y) (+ y x))
-nil
-&gt; (my-add 1 2)
-3
-&gt; (let ((x 1) (y 2))  (my-add x y))
-3
-&gt; (((lambda (x y) (+ x y)) 1) 2)   ;; currying
-3
-&gt; exit
+<pre><code class="language-klipse" data-external-libs="https://raw.githubusercontent.com/viebel/core.match/master/src/main/clojure/,https://raw.githubusercontent.com/jiacai2050/scheme.clj/master/src/cljc/">
+  (ns my.scheme
+    (:require [scheme.core :refer [eval]]))
 </code></pre>
+<pre><code class="language-klipse">
+(map eval
+    ["((lambda (x y) (+ y x)) 1 22)"
+     "(((lambda (x y)
+                              (+ x y))
+                      1)
+                     20)"
+     "(cons 2 3)"])
+</code></pre>
+
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/jiacai2050/scheme.clj">Scheme.clj</a> is maintained by <a href="https://github.com/jiacai2050">jiacai2050</a>.</span>
@@ -81,6 +73,6 @@ nil
 
     </section>
 
-  
+
   </body>
 </html>
