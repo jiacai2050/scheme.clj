@@ -3,19 +3,14 @@
   <head>
     <meta charset="UTF-8">
     <title>Scheme.clj by jiacai2050</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://clojure.org/images/clojure-logo-icon-32.png">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="http://app.klipse.tech/css/codemirror.css">
-    <script src="http://app.klipse.tech/plugin/js/klipse_plugin.js?v=3.3.1"></script>
-    <script>
-        window.klipse_settings = {
-            selector: '.language-klipse'
-        };
 
-    </script>
   </head>
   <body>
     <section class="page-header">
@@ -27,7 +22,7 @@
     </section>
 
     <section class="main-content">
-      <p>Lisp is good at meta-programming, Clojure as a new dialect of Lisp, brings powers of Lisp into JVM world. <a href="https://github.com/jiacai2050/scheme.clj/">Scheme.clj</a> project is my attempt to implement Scheme in Clojure(Script). It isn't a complete <a href="http://www.schemers.org/Documents/Standards/R5RS/">R5Rs</a> implementation, only partial operator and feature are supported, for which you can check out <a href="https://github.com/jiacai2050/scheme.clj/blob/master/src/cljc/scheme/env.cljc">here</a>.</p>
+      <p>Lisp is good at meta-programming, Clojure as a new dialect of Lisp, brings powers of Lisp into JVM world. <a href="https://github.com/jiacai2050/scheme.clj/">Scheme.clj</a> project is my attempt to implement Scheme in Clojure(Script). It isn't a complete <a href="http://www.schemers.org/Documents/Standards/R5RS/">R5Rs</a> implementation, only partial operator and feature are supported, for which you can check out at <a href="#live-demo">Live Demo</a> part.</p>
 
 <h2>
 <a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How it works</h2>
@@ -37,7 +32,7 @@
 
 <p>In case of you not having read the wonderful book <a href="http://mitpress.mit.edu/sicp">SICP</a>,  I will firstly explain the famous <a href="http://sarabander.github.io/sicp/html/4_002e1.xhtml#g_t4_002e1_002e1">eval-apply cycle</a>.</p>
 
-<p><img src="https://camo.githubusercontent.com/1641c36493f8543fcb60fa2c082f52abd5068f5c/68747470733a2f2f696d672e616c6963646e2e636f6d2f696d6765787472612f69332f3538313136363636342f5442324a68342e6b705858585862375858585858585858585858585f21213538313136363636342e706e67" alt="eval-apply cycle"></p>
+<center><img src="https://camo.githubusercontent.com/1641c36493f8543fcb60fa2c082f52abd5068f5c/68747470733a2f2f696d672e616c6963646e2e636f6d2f696d6765787472612f69332f3538313136363636342f5442324a68342e6b705858585862375858585858585858585858585f21213538313136363636342e706e67" alt="eval-apply cycle"></center>
 
 <p>Eval-apply cycle is the core of every programming language:</p>
 
@@ -48,21 +43,64 @@
 <p>For example, in order to eval expression <code>(+ 1 2)</code> in global env, the evaluator will call <code>add</code> with arguments <code>1</code> and <code>2</code>, which in turns to eval symbol <code>+</code>, <code>1</code> and <code>2</code> in another env (called <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">closure</a>); Now every expression is self-evaled, so <code>3</code> is returned as last value.</p>
 
 <h2>
-<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo</h2>
+<a id="live-demo" class="anchor" href="#live-demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Live Demo</h2>
+
+<p>Thanks to <a href="https://github.com/viebel/klipse">klipse</a>, We can run scheme.clj in browser !</p>
+
+<h3>
+<a id="init" class="anchor" href="#init" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Init scheme.clj</h3>
 
 <pre><code class="language-klipse" data-external-libs="https://raw.githubusercontent.com/viebel/core.match/master/src/main/clojure/,https://raw.githubusercontent.com/jiacai2050/scheme.clj/master/src/cljc/">
   (ns my.scheme
     (:require [scheme.core :refer [eval]]))
 </code></pre>
+
+<h3>
+<a id="basic-operation" class="anchor" href="#basic-operation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic</h3>
+
 <pre><code class="language-klipse">
 (map eval
-    ["((lambda (x y) (+ y x)) 1 22)"
-     "(((lambda (x y)
-                              (+ x y))
-                      1)
-                     20)"
-     "(cons 2 3)"])
+    ["1"
+     "(define foo 2)"
+     "foo"
+     "(let ((x 1) (y 2))  (+ x y))"
+     "\"hello scheme.clj world\""
+     "(> 3 4)"])
 </code></pre>
+<h3>
+<a id="flow-control" class="anchor" href="#flow-control" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Flow control</h3>
+
+<pre><code class="language-klipse">
+(eval
+   "(if (> 3 2) 3 2)")
+</code></pre>
+
+<h3>
+<a id="lambda" class="anchor" href="#lambda" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lambda</h3>
+
+<pre><code class="language-klipse">
+(map eval
+    ["((lambda (x y) (+ y x)) 1 2)"
+     "(define (my-add x y) (+ y x))"
+     "(my-add 1 2)"
+     "(((lambda (x y) (+ x y)) 1) 2)"  ;; currying
+     ])
+ </code></pre>
+
+<h3>
+<a id="cons-list" class="anchor" href="#cons-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cons/list</h3>
+
+<pre><code class="language-klipse">
+(map eval
+    ["(cons 1 2)"
+     "(list 1 2)"
+     "(car (cons 1 2))"
+     "(cdr (cons 1 2))"
+     "(car (list 1 2))"
+     "(cdr (list 1 2))"
+     "(null? (list))"
+     ])
+ </code></pre>
 
 
       <footer class="site-footer">
@@ -73,6 +111,14 @@
 
     </section>
 
-
   </body>
+  <!-- MUST placed after body tag -->
+  <link rel="stylesheet" type="text/css" href="http://app.klipse.tech/css/codemirror.css">
+  <script>
+      window.klipse_settings = {
+          selector: '.language-klipse'
+      };
+  </script>
+  <script src="http://app.klipse.tech/plugin/js/klipse_plugin.js"></script>
+
 </html>
